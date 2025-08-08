@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOdate - Профиль</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>GOdate</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="routes.html" class="nav-link">Маршруты</a>
+                    <a href="rating.html" class="nav-link">Рейтинг</a>
+                    <a href="profile.html" class="nav-link active">Профиль</a>
+                    <a href="ai.html" class="nav-link">ИИ генерация</a>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline" id="loginBtn">Войти</button>
+                    <button class="btn btn-primary" id="profileBtn" style="display: none;">Профиль</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="container">
+            <div class="profile-layout">
+                <div class="profile-header">
+                    <div class="avatar">
+                        <img src="/placeholder.svg?height=80&width=80" alt="Аватар" id="userAvatar">
+                        <div class="avatar-controls">
+                            <input type="file" id="avatarFile" accept="image/*" style="display: none;">
+                            <button class="btn btn-outline btn-small" id="selectAvatarBtn">+</button>
+                            <button class="btn btn-primary btn-small" id="changeAvatarBtn">✓</button>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <h2 id="userName">Пользователь</h2>
+                        <p id="userEmail">user@example.com</p>
+                        <p>ID: <span id="userId">12345</span></p>
+                        <div class="rating">
+                            <span>Рейтинг: </span>
+                            <span class="rating-value" id="userRating">0</span>
+                        </div>
+                        <div class="mt-1"><button class="btn btn-outline btn-small" id="logoutBtn">Выйти</button></div>
+                    </div>
+                </div>
+
+                <div class="profile-sections">
+                    <div class="profile-section soulmate-section">
+                        <h3>Вторая половинка</h3>
+                        <div class="soulmate-content" id="soulmateContent">
+                            <p>Пока не найдена</p>
+                            <button class="btn btn-primary btn-small mt-2" id="addSoulmateBtn">Добавить половинку</button>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Друзья</h3>
+                        <div class="friends-list" id="friendsList">
+                            <p>Список друзей пуст</p>
+                        </div>
+                        <form class="add-friend-form" id="addFriendForm">
+                            <div style="flex:1">
+                                <label for="friendInput">Логин или ID</label>
+                                <input type="text" placeholder="Например: user@example.com или 42" id="friendInput" required>
+                                <div class="add-friend-hint">Мы отправим запрос на добавление в друзья</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Добавить</button>
+                        </form>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Уведомления</h3>
+                        <div class="messages-preview">
+                            <p>Просмотр последних уведомлений...</p>
+                            <a href="messages.html" class="btn btn-primary btn-small mt-2">Перейти к уведомлениям</a>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Мои маршруты</h3>
+                        <div id="myRoutesList"><p>Загрузка...</p></div>
+                        <div class="mt-2"><a class="btn btn-primary btn-small" href="create-route.html">+ Создать маршрут</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="notificationModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Уведомление</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="modalOkBtn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Загрузка...</p>
+        </div>
+    </div>
+
+    <script>
+         window.API_CONFIG = {
+            BASE_URL: 'http://localhost:8876/api',
+            ENDPOINTS: {
+                AUTH: '/auth',
+                USERS: '/users',
+                ROUTES: '/routes',
+                MESSAGES: '/messages',
+                DAILIES: '/dailies',
+                RATING: '/rating'
+            },
+            HEADERS: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+
+        window.getAuthToken = function() {
+            return localStorage.getItem('godate_token');
+        };
+
+        window.getAuthHeaders = function() {
+            const token = window.getAuthToken();
+            return token ? {
+                ...window.API_CONFIG.HEADERS,
+                'Authorization': `Bearer ${token}`
+            } : window.API_CONFIG.HEADERS;
+        };
+    </script>
+
+    <script src="js/api.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

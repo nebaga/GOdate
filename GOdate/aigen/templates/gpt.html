@@ -1,0 +1,113 @@
+    <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор маршрутов для свиданий</title>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=a0d97084-0315-417d-b383-8232b314c041&lang=ru_RU"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Генератор маршрутов для свиданий</h1>
+    
+    <div class="form-container">
+        <form id="dateForm" method="post">
+            <label for="city">Город:</label>
+            <input type="text" id="city" name="city" required 
+                   value="{{ city if city else 'Москва' }}">
+            
+            <label for="budget">Бюджет (рубли):</label>
+            <input type="number" id="budget" name="budget" required 
+                   value="{{ budget if budget else '1000' }}">
+            
+            <label for="people">Количество человек:</label>
+            <div class="slider-container">
+                <input type="range" id="people" name="people" min="1" max="10" value="{{ people if people else '2' }}">
+                <span id="peopleValue">{{ people if people else '2' }}</span>
+            </div>
+
+            <label for="time">Время затраченное на свидание (в часах):</label>
+            <div class="slider-container">
+                <input type="range" id="time" name="time" min="1" max="16" value="{{ time if time else '2' }}">
+                <span id="timeValue">{{ time if time else '2' }}</span>
+            </div>
+            
+            <label for="places">Количество мест в маршруте:</label>
+            <div class="slider-container">
+                <input type="range" id="places" name="places" min="1" max="10" value="{{ places if places else '3' }}">
+                <span id="placesValue">{{ places if places else '3' }}</span>
+            </div>
+            
+            <label for="transport">Предпочтительный транспорт:</label>
+            <select id="transport" name="transport">
+                <option value="car" {% if transport == 'car' %}selected{% endif %}>Машина</option>
+                <option value="onfoot" {% if transport == 'onfoot' %}selected{% endif %}>Пешком</option>
+                <option value="trans" {% if transport == 'trans' %}selected{% endif %}>Общественный транспорт</option>
+                <option value="rental" {% if transport == 'rental' %}selected{% endif %}>Аренда самоката/велика</option>
+                <option value="own" {% if transport == 'own' %}selected{% endif %}>Свой велик/самокат</option>
+                <option value="taxi" {% if transport == 'taxi' %}selected{% endif %}>Такси</option>
+                <option value="boat" {% if transport == 'boat' %}selected{% endif %}>Лодка (опционально)</option>
+            </select>
+            
+            <label for="whatai">Предпочтителый ИИ:</label>
+            <select id="whatai" name="whatai">
+                <option value="gemini" {% if whatai == 'gemini' %}selected{% endif %}>Gemini2 (рекомендуемо)</option>
+                <option value="deepseek" {% if whatai == 'deepseek' %}selected{% endif %}>DeepSeekV3</option>
+                <option value="gpt" {% if whatai == 'gpt' %}selected{% endif %}>ChatGPT4</option>
+                <option value="claude" {% if whatai == 'claude' %}selected{% endif %}>Claude3</option>
+
+            </select>
+            
+            <button type="submit">Создать маршрут</button>
+        </form>
+    </div>
+    
+    <div id="loader" class="loader">
+        <p>Генерируем маршрут...</p>
+    </div>
+    
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+    
+    <div id="resultContainer" class="result-container" style="display: none;">
+        <h2>Маршрут для свидания в <span id="resultCity">{{ city }}</span> с бюджетом <span id="resultBudget">{{ budget }}</span> рублей:</h2>
+        <div id="routeText" class="route">{{ route if route else '' }}</div>
+        <div class="info">Потрачено слов: <span id="usedWords">{{ used_words if used_words else '' }}</span></div>
+    </div>
+    
+    <div class="map-container">
+        <div id="map"></div>
+    </div>
+
+    <script src="/static/script.js"></script>
+    <script type="application/json" id="coordinates-data">
+        {{ coordinates|tojson|safe if coordinates else "{}" }}
+    </script>
+    <script>
+        const coordinates = JSON.parse(document.getElementById('coordinates-data').textContent);
+        
+        // Обновление значений слайдеров
+        document.addEventListener('DOMContentLoaded', function() {
+            const peopleSlider = document.getElementById('people');
+            const peopleValue = document.getElementById('peopleValue');
+            const timeSlider = document.getElementById('time');
+            const timeValue = document.getElementById('timeValue');
+            const placesSlider = document.getElementById('places');
+            const placesValue = document.getElementById('placesValue');
+            
+            peopleSlider.addEventListener('input', function() {
+                peopleValue.textContent = this.value;
+            });
+
+            timeSlider.addEventListener('input', function() {
+                timeValue.textContent = this.value;
+            });
+            
+            placesSlider.addEventListener('input', function() {
+                placesValue.textContent = this.value;
+            });
+        });
+    </script>
+</body>
+</html>

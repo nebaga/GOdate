@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOdate - Регистрация</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>GOdate</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="routes.html" class="nav-link">Маршруты</a>
+                    <a href="rating.html" class="nav-link">Рейтинг</a>
+                    <a href="profile.html" class="nav-link">Профиль</a>
+                    <a href="ai.html" class="nav-link">ИИ генерация</a>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline" id="loginBtn">Войти</button>
+                    <button class="btn btn-primary" id="profileBtn" style="display: none;">Профиль</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content auth-page">
+        <div class="container">
+            <div class="auth-form-container">
+                <h2>Регистрация</h2>
+                <form class="auth-form" id="registerForm">
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" name="email" placeholder="your@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerNickname">Никнейм</label>
+                        <input type="text" id="registerNickname" name="nickname" placeholder="Ваш ник" required maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Пароль</label>
+                        <input type="password" id="registerPassword" name="password" placeholder="********" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Подтвердите пароль</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="********" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-large">Зарегистрироваться</button>
+                    <p class="auth-link-text">Уже есть аккаунт? <a href="login.html">Войти</a></p>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="notificationModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Уведомление</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="modalOkBtn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Загрузка...</p>
+        </div>
+    </div>
+
+    <script>
+         window.API_CONFIG = {
+             BASE_URL: 'http://localhost:8876/api',
+            ENDPOINTS: {
+                AUTH: '/auth',
+                USERS: '/users',
+                ROUTES: '/routes',
+                MESSAGES: '/messages',
+                DAILIES: '/dailies',
+                RATING: '/rating'
+            },
+            HEADERS: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+
+        window.getAuthToken = function() {
+            return localStorage.getItem('godate_token');
+        };
+
+        window.getAuthHeaders = function() {
+            const token = window.getAuthToken();
+            return token ? {
+                ...window.API_CONFIG.HEADERS,
+                'Authorization': `Bearer ${token}`
+            } : window.API_CONFIG.HEADERS;
+        };
+    </script>
+
+    <script src="js/api.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/register.js"></script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOdate - ИИ генерация маршрута</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=a0d97084-0315-417d-b383-8232b314c041&lang=ru_RU"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>GOdate</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="routes.html" class="nav-link">Маршруты</a>
+                    <a href="rating.html" class="nav-link">Рейтинг</a>
+                    <a href="profile.html" class="nav-link">Профиль</a>
+                    <a href="ai.html" class="nav-link active">ИИ генерация</a>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline" id="loginBtn">Войти</button>
+                    <button class="btn btn-primary" id="profileBtn" style="display: none;">Профиль</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="container">
+            <h2 class="page-title">ИИ генерация маршрута</h2>
+            <form class="date-form" id="aiForm">
+                <div class="form-group">
+                    <label for="city">Город</label>
+                    <select id="city" name="city" required>
+                        <option value="">Выберите город</option>
+                        <option value="moscow">Москва</option>
+                        <option value="spb">Санкт-Петербург</option>
+                        <option value="novosibirsk">Новосибирск</option>
+                        <option value="ekaterinburg">Екатеринбург</option>
+                        <option value="kazan">Казань</option>
+                        <option value="nizhny_novgorod">Нижний Новгород</option>
+                        <option value="chelyabinsk">Челябинск</option>
+                        <option value="samara">Самара</option>
+                        <option value="omsk">Омск</option>
+                        <option value="rostov_on_don">Ростов-на-Дону</option>
+                        <option value="ufa">Уфа</option>
+                        <option value="krasnoyarsk">Красноярск</option>
+                        <option value="perm">Пермь</option>
+                        <option value="voronezh">Воронеж</option>
+                        <option value="volgograd">Волгоград</option>
+                        <option value="krasnodar">Краснодар</option>
+                        <option value="saratov">Саратов</option>
+                        <option value="tyumen">Тюмень</option>
+                        <option value="tolyatti">Тольятти</option>
+                        <option value="izhevsk">Ижевск</option>
+                        <option value="barnaul">Барнаул</option>
+                        <option value="ulyanovsk">Ульяновск</option>
+                        <option value="irkutsk">Иркутск</option>
+                        <option value="khabarovsk">Хабаровск</option>
+                        <option value="yaroslavl">Ярославль</option>
+                        <option value="vladimir">Владимир</option>
+                        <option value="makhachkala">Махачкала</option>
+                        <option value="tomsk">Томск</option>
+                        <option value="orenburg">Оренбург</option>
+                        <option value="kemerovo">Кемерово</option>
+                        <option value="ryazan">Рязань</option>
+                        <option value="astrakhan">Астрахань</option>
+                        <option value="naberezhnye_chelny">Набережные Челны</option>
+                        <option value="penza">Пенза</option>
+                        <option value="lipetsk">Липецк</option>
+                        <option value="kirov">Киров</option>
+                        <option value="cheboksary">Чебоксары</option>
+                        <option value="tula">Тула</option>
+                        <option value="kaliningrad">Калининград</option>
+                        <option value="kursk">Курск</option>
+                        <option value="stavropol">Ставрополь</option>
+                        <option value="sochi">Сочи</option>
+                        <option value="ivanovo">Иваново</option>
+                        <option value="bryansk">Брянск</option>
+                        <option value="belgorod">Белгород</option>
+                        <option value="arzamas">Арзамас</option>
+                        <option value="vladivostok">Владивосток</option>
+                        <option value="sevastopol">Севастополь</option>
+                        <option value="grozny">Грозный</option>
+                        <option value="kaluga">Калуга</option>
+                        <option value="smolensk">Смоленск</option>
+                        <option value="volzhsky">Волжский</option>
+                        <option value="murmansk">Мурманск</option>
+                        <option value="vladikavkaz">Владикавказ</option>
+                        <option value="sterlitamak">Стерлитамак</option>
+                        <option value="gatchina">Гатчина</option>
+                        <option value="yoshkar_ola">Йошкар-Ола</option>
+                        <option value="nazran">Назрань</option>
+                        <option value="syktivkar">Сыктывкар</option>
+                        <option value="nakhodka">Находка</option>
+                        <option value="yuzhno_sakhalinsk">Южно-Сахалинск</option>
+                        <option value="birobidzhan">Биробиджан</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="budget">Бюджет (рубли)</label>
+                    <input type="number" id="budget" name="budget" value="1000" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="people">Количество человек</label>
+                    <div class="slider-container">
+                        <input type="range" id="people" name="people" min="1" max="10" value="2" class="slider">
+                        <span id="peopleValue" class="slider-value">2</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="time">Время (часы)</label>
+                    <div class="slider-container">
+                        <input type="range" id="time" name="time" min="1" max="16" value="2" class="slider">
+                        <span id="timeValue" class="slider-value">2</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="places">Количество мест</label>
+                    <div class="slider-container">
+                        <input type="range" id="places" name="places" min="1" max="10" value="3" class="slider">
+                        <span id="placesValue" class="slider-value">3</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="transport">Предпочтительный транспорт</label>
+                    <select id="transport" name="transport">
+                        <option value="car">Машина</option>
+                        <option value="onfoot">Пешком</option>
+                        <option value="trans">Общественный транспорт</option>
+                        <option value="rental">Аренда самоката/велика</option>
+                        <option value="own">Свой велик/самокат</option>
+                        <option value="taxi">Такси</option>
+                        <option value="boat">Лодка</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="whatai">Предпочтительный ИИ</label>
+                    <select id="whatai" name="whatai">
+                        <option value="gemini">Gemini2 (рекомендуемо)</option>
+                        <option value="deepseek">DeepSeekV3</option>
+                        <option value="gpt">ChatGPT4</option>
+                        <option value="claude">Claude3</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-large" id="aiSubmitBtn">
+                    <span class="btn-text">Создать маршрут</span>
+                    <span class="btn-loading" style="display: none;">Генерация...</span>
+                </button>
+            </form>
+
+            <div class="route-result" id="aiResult" style="display: none;">
+                <h3>Сгенерированный маршрут</h3>
+                <div class="info text-right">Данные могут отличаться от реальности. Потрачено слов: <span id="usedWords"></span></div>
+                <div id="routeText" class="route"></div>
+            </div>
+
+            <div class="route-result" style="height: 420px;">
+                <div id="map" style="width: 100%; height: 100%; border-radius: 12px;"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="notificationModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Уведомление</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="modalOkBtn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Загрузка...</p>
+        </div>
+    </div>
+
+    <script>
+        window.API_CONFIG = {
+            BASE_URL: 'http://localhost:8876/api',
+            ENDPOINTS: {
+                AUTH: '/auth', USERS: '/users', ROUTES: '/routes', MESSAGES: '/messages', DAILIES: '/dailies', RATING: '/rating'
+            },
+            HEADERS: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+        };
+        window.getAuthToken = function() { return localStorage.getItem('godate_token'); };
+        window.getAuthHeaders = function() {
+            const token = window.getAuthToken();
+            return token ? { ...window.API_CONFIG.HEADERS, 'Authorization': `Bearer ${token}` } : window.API_CONFIG.HEADERS;
+        };
+    </script>
+
+    <script src="js/api.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/ai.js"></script>
+</body>
+<script>
+  // Защита от встраивания: ничего
+</script>
+</html>
+
+
