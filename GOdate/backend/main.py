@@ -615,7 +615,7 @@ def recommend(req: RecommendationRequest, current: User = Depends(get_current_us
     return RecommendationResponse(city=req.city, description=req.description, places=req.places, steps=steps)
 
 
-CHAD_API_KEY = "chad-9d49bd1f14804ee7ad4961df0f7700efia29maug"
+CHAD_API_KEY = "chad-ВАШ_API_КЛЮЧ"
 
 
 @app.post("/api/ai/generate", response_model=AIGenerateResponse)
@@ -698,4 +698,5 @@ app.mount("/uploads", StaticFiles(directory=str(uploads_dir)), name="uploads")
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="127.0.0.1", port=8877)
