@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOdate - Готовые маршруты</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=a0d97084-0315-417d-b383-8232b314c041&lang=ru_RU"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>GOdate</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link active">Главная</a>
+                    <a href="routes.html" class="nav-link">Маршруты</a>
+                    <a href="rating.html" class="nav-link">Рейтинг</a>
+                     <a href="profile.html" class="nav-link">Профиль</a>
+                    <a href="ai.html" class="nav-link">ИИ генерация</a>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline" id="loginBtn">Войти</button>
+                    <button class="btn btn-primary" id="profileBtn" style="display: none;">Профиль</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="home-layout">
+                <div class="left-column">
+                    <h2 class="page-title">Готовые маршруты</h2>
+
+                    <div class="swipe-section">
+                        <div class="filters mb-2">
+                            <select id="homeCityFilter">
+                                <option value="">Все города</option>
+                                <option value="moscow">Москва</option>
+                                <option value="spb">Санкт-Петербург</option>
+                                <option value="novosibirsk">Новосибирск</option>
+                                <option value="ekaterinburg">Екатеринбург</option>
+                                <option value="kazan">Казань</option>
+                                <option value="nizhny_novgorod">Нижний Новгород</option>
+                                <option value="chelyabinsk">Челябинск</option>
+                                <option value="samara">Самара</option>
+                                <option value="omsk">Омск</option>
+                                <option value="rostov_on_don">Ростов-на-Дону</option>
+                                <option value="ufa">Уфа</option>
+                                <option value="krasnoyarsk">Красноярск</option>
+                                <option value="perm">Пермь</option>
+                                <option value="voronezh">Воронеж</option>
+                                <option value="volgograd">Волгоград</option>
+                                <option value="krasnodar">Краснодар</option>
+                                <option value="saratov">Саратов</option>
+                                <option value="tyumen">Тюмень</option>
+                                <option value="tolyatti">Тольятти</option>
+                                <option value="izhevsk">Ижевск</option>
+                                <option value="barnaul">Барнаул</option>
+                                <option value="ulyanovsk">Ульяновск</option>
+                                <option value="irkutsk">Иркутск</option>
+                                <option value="khabarovsk">Хабаровск</option>
+                                <option value="yaroslavl">Ярославль</option>
+                                <option value="vladimir">Владимир</option>
+                                <option value="makhachkala">Махачкала</option>
+                                <option value="tomsk">Томск</option>
+                                <option value="orenburg">Оренбург</option>
+                                <option value="kemerovo">Кемерово</option>
+                                <option value="ryazan">Рязань</option>
+                                <option value="astrakhan">Астрахань</option>
+                                <option value="naberezhnye_chelny">Набережные Челны</option>
+                                <option value="penza">Пенза</option>
+                                <option value="lipetsk">Липецк</option>
+                                <option value="kirov">Киров</option>
+                                <option value="cheboksary">Чебоксары</option>
+                                <option value="tula">Тула</option>
+                                <option value="kaliningrad">Калининград</option>
+                                <option value="kursk">Курск</option>
+                                <option value="stavropol">Ставрополь</option>
+                                <option value="sochi">Сочи</option>
+                                <option value="ivanovo">Иваново</option>
+                                <option value="bryansk">Брянск</option>
+                                <option value="belgorod">Белгород</option>
+                                <option value="arzamas">Арзамас</option>
+                                <option value="vladivostok">Владивосток</option>
+                                <option value="sevastopol">Севастополь</option>
+                                <option value="grozny">Грозный</option>
+                                <option value="kaluga">Калуга</option>
+                                <option value="smolensk">Смоленск</option>
+                                <option value="volzhsky">Волжский</option>
+                                <option value="murmansk">Мурманск</option>
+                                <option value="vladikavkaz">Владикавказ</option>
+                                <option value="sterlitamak">Стерлитамак</option>
+                                <option value="gatchina">Гатчина</option>
+                                <option value="yoshkar_ola">Йошкар-Ола</option>
+                                <option value="nazran">Назрань</option>
+                                <option value="syktivkar">Сыктывкар</option>
+                                <option value="nakhodka">Находка</option>
+                                <option value="yuzhno_sakhalinsk">Южно-Сахалинск</option>
+                                <option value="birobidzhan">Биробиджан</option>
+                            </select>
+                            <button class="btn btn-outline" id="homeApplyFiltersBtn">Применить</button>
+                            
+                        </div>
+
+                        <div class="swipe-stack" id="homeSwipeStack">
+                            <div class="loading-routes">Загрузка маршрутов...</div>
+                        </div>
+
+                        <div class="swipe-hints text-center mt-1">
+                            <span class="text-light">Свайп влево — дальше, свайп вправо — в избранное</span>
+                        </div>
+
+                        <div class="route-result hidden" id="homeRouteDetails"></div>
+                    </div>
+                </div>
+
+                <div class="right-column">
+                    <div class="dailies-create-section">
+                        <div class="dailies-column">
+                            <h3>Дейлики</h3>
+                            <div class="dailies">
+                                <div class="daily-card">
+                                    <h4>Добавить друга</h4>
+                                    <p>Добавьте нового друга сегодня</p>
+                                    <button class="btn btn-outline btn-small" data-daily="add_friend">Выполнить</button>
+                                </div>
+                                <div class="daily-card">
+                                    <h4>Сходить на свидание</h4>
+                                    <p>Кино/ресторан/парк — подтверждайте кнопкой</p>
+                                    <button class="btn btn-outline btn-small" data-daily="date_out">Выполнить</button>
+                                </div>
+                                <div class="daily-card">
+                                    <h4>Создать свой маршрут</h4>
+                                    <p>Создайте маршрут и поделитесь</p>
+                                    <button class="btn btn-outline btn-small" data-daily="create_route">Выполнить</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="create-route-column">
+                            <h3>Создание</h3>
+                            <div class="create-route-card">
+                                <h4>Новый маршрут</h4>
+                                <p>Создайте уникальный маршрут для других пользователей</p>
+                                <button class="btn btn-primary btn-small" id="createRouteHeaderBtn">+ Создать</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timer">
+                        <span>Обновление через: </span>
+                        <span class="timer-value" id="dailyTimer">00:24:17</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно для уведомлений -->
+    <div class="modal" id="notificationModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Уведомление</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="modalOkBtn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Индикатор загрузки -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Загрузка...</p>
+        </div>
+    </div>
+
+    <!-- API конфигурация -->
+    <script>
+        window.API_CONFIG = {
+            BASE_URL: 'http://localhost:8876/api',
+            ENDPOINTS: {
+                AUTH: '/auth',
+                USERS: '/users',
+                ROUTES: '/routes',
+                MESSAGES: '/messages',
+                DAILIES: '/dailies',
+                RATING: '/rating'
+            },
+            HEADERS: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+
+        window.getAuthToken = function() {
+            return localStorage.getItem('godate_token');
+        };
+
+        window.getAuthHeaders = function() {
+            const token = window.getAuthToken();
+            return token ? {
+                ...window.API_CONFIG.HEADERS,
+                'Authorization': `Bearer ${token}`
+            } : window.API_CONFIG.HEADERS;
+        };
+    </script>
+
+    <script src="js/api.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/home.js"></script>
+</body>
+</html>
